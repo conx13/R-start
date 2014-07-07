@@ -92,14 +92,13 @@ function ikoodiKontroll() {
 	}
 }
 /////////////////////
-//näitame veatäidet//
+//näitame veateadet//
 /////////////////////
 function viga(veaText){
 	$("#error").html("<h2>"+veaText+"</h2>");
 	$("#error").slideDown();
 	$("#nimiText").slideUp();
-	$("#jobText").slideUp();
-	
+	$("#jobText").slideUp();	
 }
 
 
@@ -121,8 +120,7 @@ $(document).keypress(function(e) {
 		}else{
 			//console.log("ei ole nulle");
 			nimeKontroll(kood);
-		};  
-		
+		};  		
     }
 });
 
