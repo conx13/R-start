@@ -1,4 +1,11 @@
-
+/*
+* Validate Estonian national identification code.
+*
+* Copyright (c) 2009 Mika Tuupola
+*
+* Licensed under the MIT license:
+* http://www.opensource.org/licenses/mit-license.php
+*/
 
 function isikukood(kood) {
     
