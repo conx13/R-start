@@ -1,0 +1,9 @@
+#prog1 {
+  -webkit-transition: width 10.0s ease !important;
+     -moz-transition: width 10.0s ease !important;
+       -o-transition: width 10.0s ease !important;
+          transition: width 10.0s ease !important;
+}
+#error,#nimiText,#jobText {
+	display: none;
+}
