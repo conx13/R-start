@@ -95,12 +95,10 @@ function progress3(){
 ///////////////////////
 function ikoodiKontroll() {
 	var kood=$("#ikood").val();
-	//console.log("ikoodi kontroll:" + $("#ikood").val());
-	//console.log(isikukood(kood));
 	if (isikukood(kood)){
 		$("#error").slideUp();
 	}else{
-		$("#error").slideDown()
+		$("#error").slideDown();
 	}
 }
 /////////////////////
@@ -143,8 +141,6 @@ $(document).keypress(function(e) {
 ////////////////////////////
 function nimeKontroll(kood) {
 	var tulem;
-	//console.log("Kood on:" +kood);
-	//console.log(sessionStorage.getItem('ikood'));
 	$.getJSON("otsi_nimi.php",{ikood:kood},function(data){
 		//console.log(data);
 		if (data[0].Error==1){
@@ -175,7 +171,6 @@ function nimeKontroll(kood) {
 ///////////////////////////
 function selleKuuTunnid(kood){
 	$.getJSON("selleKuuTunnid.php",{ikood:kood},function(data){
-		//console.log(data);
 		if (data.error==1){
 			viga(data.Text);
 		}else{
@@ -192,7 +187,6 @@ function selleKuuTunnid(kood){
 ////////////////////////////
 function jobKontroll(kood) {
 	$.getJSON("otsi_too.php",{tkood:kood},function(data){
-		//console.log(data);
 		if (data.error==1){
 			viga(data.Text);
 		}else{
@@ -207,7 +201,6 @@ function jobKontroll(kood) {
 /////////////////////////////////
 function tanaTool(){
 	$.getJSON("tanaTool.php",function(data){
-		//console.log(data);
 		if (data.error==1){
 			viga(data.Text);
 		}else{
