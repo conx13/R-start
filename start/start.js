@@ -5,7 +5,7 @@ $(function(){
 	sessionStorage.clear();//tyhjendame kogu sessionStorage
 })
 
-//Gloabaalsed muutujad
+//Gloabaalsed muutujad mida saavad teise funktsioonid kasutada
 var tootaja=new Object(); //tootaja object
 var pToo=new Object(); //pooli töö object
 
