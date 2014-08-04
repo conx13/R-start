@@ -120,8 +120,8 @@ $(document).keypress(function(e) {
         var kood=$("#ikood").val();
 		//kellaeg();
 		//console.log("vajutasid enterit");
-		$("#error").hide();
-		$("#nimiText").hide();
+		$("#error").hide('fast');
+		$("#nimiText").hide('fast');
 		$("#ikood").val('');
 		//progress3();//tekitame bari ccs abil
 		//kontrollime, et kas on töö kood
