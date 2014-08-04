@@ -157,7 +157,7 @@ function nimeKontroll(kood) {
 			poolikToo(tootaja.tid);
 			$("#jobText").slideUp();
 			$("#nimiText").html("<h1>"+tootaja.nimi+"</h>");
-			$("#nimiText").slideDown();
+			$("#nimiText").slideDown('fast');
 			tulem=1;
 		}
 	})
