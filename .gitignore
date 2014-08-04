@@ -14,3 +14,5 @@ queryd/otsi_job_rkood.sql
 queryd/otsi_tootajat_ikoodi_jargi.sql
 
 start/test.html
+
+conf.php
