@@ -1,11 +1,11 @@
 <?php
 	$path=$_SERVER['DOCUMENT_ROOT'];
 	include ($path .'/conf.php');
-	if (isset($_GET["tkood"])){
-		$tkood=$_GET["tkood"];
-		$query = "SELECT 0 as error, job.jid, '0' || job.jid AS rkood, job.lepnr, job.job, grupp.gnimi, grupp.ggrupp  ";
-		$query .="FROM public.job, public.grupp ";
-		$query .="WHERE job.gid = grupp.gid AND (('0'||job.jid)='" .$tkood. "')";
+	if (isset($_GET["tid"])){
+		$tid=$_GET["tid"];
+		$query = "SELECT 0 AS error, lepnr, job, jid, start ";
+		$query .="FROM v_tana_poolik_too_test ";
+		$query .="WHERE tid='" .$tid. "'";
 		$result=pg_query($dbconn,$query);
 		if ($result=== false){
 			$error=pg_last_error($dbconn);

@@ -3,8 +3,8 @@
 	include ($path .'/conf.php');
 	if (isset($_GET["ikood"])){
 		$ikood=$_GET["ikood"];
-		$query = "SELECT enimi ||' '|| pnimi as nimi, tid ";
-		$query .="FROM tootajad ";
+		$query = "SELECT nimi, tid, ikood, lalgus, llopp ";
+		$query .="FROM w_tootajad ";
 		$query .="WHERE ikood = '" . $ikood . "'";
 		$result=pg_query($dbconn,$query);
 		if ($result=== false){
@@ -15,7 +15,7 @@
 				$text='OK!';
 				$i=0;
 				while($row=pg_fetch_array($result)) {
-					$data[$i]=array('Error'=>'0','Nimi'=>$row ['nimi'], 'tid'=>$row['tid']);
+					$data[$i]=array('Error'=>'0','Nimi'=>$row ['nimi'], 'tid'=>$row['tid'], 'ikood'=>$row['ikood'], 'lalgus'=>$row['lalgus'], 'llopp'=>$row['llopp']);
 					$i=$i+1;
 				};
 				pg_close($dbconn);

@@ -7,3 +7,22 @@
 #error,#nimiText,#jobText {
 	display: none;
 }
+
+
+.navbar-text.h2 {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	font-size: 36px;
+	color: white;
+}
+
+.progress {
+	height: 8px;
+}
+
+#navAegKokku {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	font-size: 46px;
+	color: white;
+}

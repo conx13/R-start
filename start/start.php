@@ -12,10 +12,15 @@
 		<script src="isikukood.js"></script>
 	</head>
 	<body>
-		<nav class="navbar navbar-default">
-		  <div class="container">
-			<p class="navbar-text pull-left">Hetkel on registreerinuid:<span id="tooLoendur">100</span></p>
-			<p class="navbar-text pull-right" id="kell"></p>
+		<nav class="navbar navbar-inverse">
+			<div class="container">
+				<div style="position:absolute; left:50%">
+      				<div style="position:relative; left:-50%">        
+          				<p class="navbar-text h1" id="navAegKokku"></p>
+      				</div>
+    			</div>
+			<p class="navbar-text pull-left visible-lg visible-md"><span id="tooLoendur">0</span></p>
+			<p class="navbar-text pull-right h2 visible-lg visible-md" id="kell"></p>
 		  </div>
 		</nav>
 		<div class="container">
