@@ -1,6 +1,5 @@
 <?php
-	error_reporting(0);
-
+	//error_reporting(0);
 	$path=$_SERVER['DOCUMENT_ROOT'];
 	include ($path .'/conf.php');
 	if (isset($_GET["ikood"])){
@@ -11,16 +10,11 @@
 		$result=pg_query($dbconn,$query);
 		if ($result=== false){
 			$error=pg_last_error($dbconn);
-			//$error=str_replace('"', "'", $error);
 			$data = array('error'=>'1', 'Text'=> $error);
 		}else{
 			if (pg_num_rows($result)>0){
-				//$text='OK!';
-				//$i=0;
 				while($row=pg_fetch_assoc($result)) {
 					$data[]=$row;
-					//$data=array('error'=>'0','Text'=>$row ['aeg_kokku']);
-					//$i=$i+1;
 				};
 				pg_close($dbconn);
 			}else{
