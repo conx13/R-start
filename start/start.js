@@ -1,12 +1,11 @@
-///////////////////////////////////////////
 //Peale lehe laadimist tehtavad tegevused//
-///////////////////////////////////////////
 $(function(){
 	tanaTool(); //loeme kokku aktiivsed tootajad
 	kellaeg(); //näitame kellaega
 	sessionStorage.clear();//tyhjendame kogu sessionStorage
 })
 
+//Gloabaalsed muutujad
 var tootaja=new Object(); //tootaja object
 var pToo=new Object(); //pooli töö object
 
@@ -106,9 +105,9 @@ function ikoodiKontroll() {
 /////////////////////
 function viga(veaText){
 	$("#error").html("<h2>"+veaText+"</h2>");
-	$("#error").slideDown();
 	$("#nimiText").slideUp();
-	$("#jobText").slideUp();	
+	//$("#jobText").slideUp();	
+	$("#error").slideDown();
 }
 
 
@@ -204,6 +203,8 @@ function tanaTool(){
 		if (data.error==1){
 			viga(data.Text);
 		}else{
+            $("#tooLoendur").html(data[0].tanakokku);
+            $('#tooLoendur').html(data[0].tanaKokku);
 			$("#tooLoendur").html(data[0].tanakokku);
 		};
 	});
@@ -219,6 +220,7 @@ function poolikToo(tid) {
 			$("#jobText").html("<h1>Ei ole aktiivset tööd.</h>");
 			$("#jobText").slideDown();
 		}else{
+			$('#jobText').slideUp();
 			$("#jobText").html("<h1>Leping: "+data[0].lepnr+" - "+data[0].job +"</h>");
 			$("#jobText").slideDown()
 		};
