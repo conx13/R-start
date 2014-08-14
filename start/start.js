@@ -106,7 +106,7 @@ function ikoodiKontroll() {
 function viga(veaText){
 	$("#error").html("<h2>"+veaText+"</h2>");
 	$("#nimiText").slideUp();
-	//$("#jobText").slideUp();	
+	$("#jobText").slideUp();	
 	$("#error").slideDown();
 }
 
@@ -119,27 +119,36 @@ $(document).keypress(function(e) {
         var kood=$("#ikood").val();
 		//kellaeg();
 		//console.log("vajutasid enterit");
-		$("#error").hide('fast');
-		$("#nimiText").hide('fast');
+		$("#error").hide();
+		//$("#nimiText").hide();
 		$("#ikood").val('');
-		//progress3();//tekitame bari ccs abil
+		progress3();//tekitame bari ccs abil
 		//kontrollime, et kas on töö kood
-		if (kood.substring(0,1)=='0'){
-			//console.log("kood algab nulliga");
-			jobKontroll(kood);
-		}else{
-			nimeKontroll(kood);
-			//console.log(tootaja.nimi);
 
-		};  		
+		if (tootaja.nimi) {
+				if (kood.substring(0,1)=='0'){
+					jobKontrollOnIsik(kood);
+				}else{
+					nimeKontrollOnIsik(kood);
+				};  
+			}else{
+				if (kood.substring(0,1)=='0'){
+					jobKontrollEiIsik(kood);
+				}else{
+					nimeKontrollEiIsik(kood);
+				};
+				tootaja.nimi='mees';  		
+			}; 
     }
 });
 
-////////////////////////////
-//Otsime ikoodi järgi nime//
-////////////////////////////
-function nimeKontroll(kood) {
+/////////////////////////////////////////////////////
+//Otsime ikoodi järgi nime kui isikut ei ole kirjas//
+/////////////////////////////////////////////////////
+function nimeKontrollEiIsik(kood) {
 	var tulem;
+	console.time('nimekontroll');
+	console.log('nimekontroll');
 	$.getJSON("otsi_nimi.php",{ikood:kood},function(data){
 		//console.log(data);
 		if (data[0].Error==1){
@@ -154,12 +163,13 @@ function nimeKontroll(kood) {
 			tootaja.louna_lopp=data[0].llopp;
 			selleKuuTunnid(kood); //leiame selle kuu tundide summa
 			poolikToo(tootaja.tid);
-			$("#jobText").slideUp();
+			//$("#jobText").slideUp();
 			$("#nimiText").html("<h1>"+tootaja.nimi+"</h>");
 			$("#nimiText").slideDown('fast');
 			tulem=1;
 		}
 	})
+	console.timeEnd('nimekontroll');
 	//console.log('2');
 }
 
@@ -174,6 +184,7 @@ function selleKuuTunnid(kood){
 			viga(data.Text);
 		}else{
 			//console.log(data[0].aeg_kokku);
+			console.log('selleKuuTunnid');
 			$("#navAegKokku").html("Kokku aeg: " +data[0].aeg_kokku);
 		}
 	})
@@ -184,7 +195,8 @@ function selleKuuTunnid(kood){
 ////////////////////////////
 //Otsime tkoodi järgi tööd//
 ////////////////////////////
-function jobKontroll(kood) {
+function jobKontrollEiIsik(kood) {
+	console.log('jobKontroll');
 	$.getJSON("otsi_too.php",{tkood:kood},function(data){
 		if (data.error==1){
 			viga(data.Text);
@@ -199,6 +211,7 @@ function jobKontroll(kood) {
 //Loendame hetkel reg tootajaid//
 /////////////////////////////////
 function tanaTool(){
+	console.log('tanaTool');
 	$.getJSON("tanaTool.php",function(data){
 		if (data.error==1){
 			viga(data.Text);
@@ -214,13 +227,14 @@ function tanaTool(){
 //leiame pooliku töö//
 //////////////////////
 function poolikToo(tid) {
+	console.log('poolikToo');
 	$.getJSON("poolik_too.php",{tid:tid} ,function(data){
 		//console.log(data);
 		if (data.error==1){
 			$("#jobText").html("<h1>Ei ole aktiivset tööd.</h>");
 			$("#jobText").slideDown();
 		}else{
-			$('#jobText').slideUp();
+			//$('#jobText').slideUp();
 			$("#jobText").html("<h1>Leping: "+data[0].lepnr+" - "+data[0].job +"</h>");
 			$("#jobText").slideDown()
 		};

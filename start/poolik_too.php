@@ -17,7 +17,7 @@
 				};
 				pg_close($dbconn);
 			}else{
-				$data = array('error'=>'1', 'Text'=> 'Ei leidnud koodi!');
+				$data = array('error'=>'1', 'Text'=> 'Tundmatu või vigane kood!');
 			}
 		};
 	}else{
