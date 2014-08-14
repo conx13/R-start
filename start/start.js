@@ -7,7 +7,7 @@ $(function(){
 
 //Gloabaalsed muutujad mida saavad teise funktsioonid kasutada
 var tootaja=new Object(); //tootaja object
-var pToo=new Object(); //pooli töö object
+var pToo=new Object(); //poolik töö object
 
 //////////////////////////////////
 //tekitame kella - serveri ajaga//
@@ -136,8 +136,7 @@ $(document).keypress(function(e) {
 					jobKontrollEiIsik(kood);
 				}else{
 					nimeKontrollEiIsik(kood);
-				};
-				tootaja.nimi='mees';  		
+				}; 		
 			}; 
     }
 });
@@ -147,8 +146,6 @@ $(document).keypress(function(e) {
 /////////////////////////////////////////////////////
 function nimeKontrollEiIsik(kood) {
 	var tulem;
-	console.time('nimekontroll');
-	console.log('nimekontroll');
 	$.getJSON("otsi_nimi.php",{ikood:kood},function(data){
 		//console.log(data);
 		if (data[0].Error==1){
@@ -169,10 +166,37 @@ function nimeKontrollEiIsik(kood) {
 			tulem=1;
 		}
 	})
-	console.timeEnd('nimekontroll');
-	//console.log('2');
 }
 
+/////////////////////////////////////////////////////
+//Otsime ikoodi järgi nime kui isik on kirjas//
+/////////////////////////////////////////////////////
+function nimeKontrollOnIsik(kood) {
+	var tulem;
+	console.log(tootaja.ikood==kood);
+	if (!(tootaja.ikood==kood)) {
+		$.getJSON("otsi_nimi.php",{ikood:kood},function(data){
+			//console.log(data);
+			if (data[0].Error==1){
+				viga(data[0].Text);
+				tootaja.nimi=false;		
+			}else{
+				tootaja.nimi=data[0].Nimi;
+				tootaja.ikood=data[0].ikood;
+				tootaja.tid=data[0].tid;
+				tootaja.louna_algus=data[0].lalgus;
+				tootaja.louna_lopp=data[0].llopp;
+				selleKuuTunnid(kood); //leiame selle kuu tundide summa
+				poolikToo(tootaja.tid);
+				//$("#jobText").slideUp();
+				$("#nimiText").html("<h1>"+tootaja.nimi+"</h>");
+				$("#nimiText").slideDown('fast');
+			}
+		})
+	}else{
+		console.log('On sama kood!');
+	}
+}
 
 
 ///////////////////////////
@@ -184,7 +208,6 @@ function selleKuuTunnid(kood){
 			viga(data.Text);
 		}else{
 			//console.log(data[0].aeg_kokku);
-			console.log('selleKuuTunnid');
 			$("#navAegKokku").html("Kokku aeg: " +data[0].aeg_kokku);
 		}
 	})
@@ -211,7 +234,6 @@ function jobKontrollEiIsik(kood) {
 //Loendame hetkel reg tootajaid//
 /////////////////////////////////
 function tanaTool(){
-	console.log('tanaTool');
 	$.getJSON("tanaTool.php",function(data){
 		if (data.error==1){
 			viga(data.Text);
@@ -227,15 +249,16 @@ function tanaTool(){
 //leiame pooliku töö//
 //////////////////////
 function poolikToo(tid) {
-	console.log('poolikToo');
 	$.getJSON("poolik_too.php",{tid:tid} ,function(data){
 		//console.log(data);
 		if (data.error==1){
 			$("#jobText").html("<h1>Ei ole aktiivset tööd.</h>");
+			pToo.rid=false;
 			$("#jobText").slideDown();
 		}else{
 			//$('#jobText').slideUp();
 			$("#jobText").html("<h1>Leping: "+data[0].lepnr+" - "+data[0].job +"</h>");
+			pToo.rid=data[0].rid;
 			$("#jobText").slideDown()
 		};
 	});

@@ -3,7 +3,7 @@
 	include ($path .'/conf.php');
 	if (isset($_GET["tid"])){
 		$tid=$_GET["tid"];
-		$query = "SELECT 0 AS error, lepnr, job, jid, start ";
+		$query = "SELECT 0 AS error, lepnr, job, jid, start, rid ";
 		$query .="FROM v_tana_poolik_too_test ";
 		$query .="WHERE tid='" .$tid. "'";
 		$result=pg_query($dbconn,$query);
