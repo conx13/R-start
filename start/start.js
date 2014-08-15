@@ -89,19 +89,6 @@ function progress3(){
 	},1000)
 }
 
-///////////////////////
-//Error ei leia ikoodi//
-///////////////////////
-function ikoodiKontroll() {
-	var kood=$("#ikood").val();
-	if (isikukood(kood)){
-		$("#error").slideUp();
-	}else{
-		$("#error").slideDown();
-	}
-}
-
-
 
 ////////////////////////
 //Kui vajutame Enterit//
@@ -127,38 +114,11 @@ $(document).keypress(function(e) {
 				if (kood.substring(0,1)=='0'){
 					jobKontrollEiIsik(kood);
 				}else{
-					nimeKontrollEiIsik(kood);
+					nimeKontroll(kood);
 				}; 		
 			}; 
     }
 });
-
-/////////////////////////////////////////////////////
-//Otsime ikoodi järgi nime kui isikut ei ole kirjas//
-/////////////////////////////////////////////////////
-function nimeKontrollEiIsik(kood) {
-	var tulem;
-	$.getJSON("otsi_nimi.php",{ikood:kood},function(data){
-		//console.log(data);
-		if (data[0].Error==1){
-			viga(data[0].Text, 'yld');
-			tootaja.nimi=false;			
-			tulem=0;
-		}else{
-			tootaja.nimi=data[0].Nimi;
-			tootaja.ikood=data[0].ikood;
-			tootaja.tid=data[0].tid;
-			tootaja.louna_algus=data[0].lalgus;
-			tootaja.louna_lopp=data[0].llopp;
-			selleKuuTunnid(kood); //leiame selle kuu tundide summa
-			poolikToo(tootaja.tid);
-			//$("#jobText").slideUp();
-			$("#nimiText").html("<h1>"+tootaja.nimi+"</h>");
-			$("#nimiText").slideDown();
-			tulem=1;
-		}
-	})
-}
 
 
 //////////////////////////////////////////////
@@ -176,6 +136,8 @@ function jobKontrollEiIsik(kood) {
 	})
 }
 
+
+
 /////////////////////////////////////////////////////
 //Otsime ikoodi järgi nime kui isik on kirjas//
 /////////////////////////////////////////////////////
@@ -183,24 +145,7 @@ function nimeKontrollOnIsik(kood) {
 	var tulem;
 	console.log(tootaja.ikood==kood);
 	if (!(tootaja.ikood==kood)) { //kui ei ole sama kood
-		$.getJSON("otsi_nimi.php",{ikood:kood},function(data){
-			//console.log(data);
-			if (data[0].Error==1){
-				viga(data[0].Text);
-				//tootaja.nimi=false;		
-			}else{
-				tootaja.nimi=data[0].Nimi;
-				tootaja.ikood=data[0].ikood;
-				tootaja.tid=data[0].tid;
-				tootaja.louna_algus=data[0].lalgus;
-				tootaja.louna_lopp=data[0].llopp;
-				selleKuuTunnid(kood); //leiame selle kuu tundide summa
-				poolikToo(tootaja.tid);
-				//$("#jobText").slideUp();
-				$("#nimiText").html("<h1>"+tootaja.nimi+"</h>");
-				$("#nimiText").slideDown();
-			}
-		})
+		nimeKontroll(kood);
 	}else{ //kui on sama kood
 		if (pToo.rid){
 			//kui on poolik töös, siis vaja lõetada
@@ -247,6 +192,34 @@ function viga(veaText,tyyp){
 	$("#error").slideDown();
 }
 
+///////////////////
+///Nime kontroll///
+///////////////////
+function  nimeKontroll(kood){
+	$.getJSON("otsi_nimi.php",{ikood:kood},function(data){
+			//console.log(data);
+			if (data[0].Error==1){
+				if (!tootaja.nimi) {
+					tootaja.nimi=false;
+					viga(data[0].Text, 'yld');
+				}else{
+					viga(data[0].Text);
+				};		
+			}else{
+				tootaja.nimi=data[0].Nimi;
+				tootaja.ikood=data[0].ikood;
+				tootaja.tid=data[0].tid;
+				tootaja.louna_algus=data[0].lalgus;
+				tootaja.louna_lopp=data[0].llopp;
+				selleKuuTunnid(kood); //leiame selle kuu tundide summa
+				poolikToo(tootaja.tid);
+				//$("#jobText").slideUp();
+				$("#nimiText").html("<h1>"+tootaja.nimi+"</h>");
+				$("#nimiText").slideDown();
+			}
+		})
+}
+
 ///////////////////////////
 //Leiame selle kuu tunnid//
 ///////////////////////////
@@ -260,9 +233,6 @@ function selleKuuTunnid(kood){
 		}
 	})
 }
-
-
-
 
 /////////////////////////////////
 //Loendame hetkel reg tootajaid//
