@@ -31,11 +31,6 @@
 				</div>
 			</div>
 			<div class="row text-center col-lg-8 col-lg-offset-2">
-				<div class="alert alert-danger" id="error" role="alert">
-					<h2>Vale kood!</h2>
-				</div>
-			</div>
-			<div class="row text-center col-lg-8 col-lg-offset-2">
 				<div class="alert alert-info" id="nimiText" role="alert">
 				</div>
 			</div>
@@ -43,6 +38,11 @@
 				<div class="alert alert-info" id="jobText" role="alert">
 				</div>
 			</div>			
+			<div class="row text-center col-lg-8 col-lg-offset-2">
+				<div class="alert alert-danger" id="error" role="alert">
+					<h2>Vale kood!</h2>
+				</div>
+			</div>
 			<div class="row text-center col-lg-12">
 				<h1 id="palunKood">Palun kood:</h1>
 			</div>
