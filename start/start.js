@@ -3,7 +3,10 @@ $(function(){
 	tanaTool(); //loeme kokku aktiivsed tootajad
 	kellaeg(); //näitame kellaega
 	sessionStorage.clear();//tyhjendame kogu sessionStorage
-})
+	var lukus;
+	lukus = window.setInterval(function(){ //et oleks ikka fookuses
+    	$("#ikood").focus();}, 1000);
+});
 
 //Gloabaalsed muutujad mida saavad teise funktsioonid kasutada
 var tootaja=new Object(); //tootaja object
@@ -192,32 +195,32 @@ function viga(veaText,tyyp){
 	$("#error").slideDown();
 }
 
-///////////////////
-///Nime kontroll///
-///////////////////
+/////////////////////////////////////////////////////////
+///Nime kontroll - mitte nulliga algava koodi kontroll///
+/////////////////////////////////////////////////////////
 function  nimeKontroll(kood){
 	$.getJSON("otsi_nimi.php",{ikood:kood},function(data){
-			//console.log(data);
-			if (data[0].Error==1){
-				if (!tootaja.nimi) {
-					tootaja.nimi=false;
-					viga(data[0].Text, 'yld');
-				}else{
-					viga(data[0].Text);
-				};		
+		if (data.error==1){
+			if (!tootaja.nimi) { //kui on isik kirjas, siis ei kustuta ekraanilt
+				tootaja.nimi=false;
+				viga(data.Text, 'yld');
 			}else{
-				tootaja.nimi=data[0].Nimi;
-				tootaja.ikood=data[0].ikood;
-				tootaja.tid=data[0].tid;
-				tootaja.louna_algus=data[0].lalgus;
-				tootaja.louna_lopp=data[0].llopp;
-				selleKuuTunnid(kood); //leiame selle kuu tundide summa
-				poolikToo(tootaja.tid);
-				//$("#jobText").slideUp();
-				$("#nimiText").html("<h1>"+tootaja.nimi+"</h>");
-				$("#nimiText").slideDown();
-			}
-		})
+				viga(data.Text);
+			};		
+		}else{
+			tootaja.nimi=data[0].nimi;
+			tootaja.ikood=data[0].ikood;
+			tootaja.tid=data[0].tid;
+			tootaja.louna_algus=data[0].lalgus;
+			tootaja.louna_lopp=data[0].llopp;
+			console.log(tootaja);
+			selleKuuTunnid(kood); //leiame selle kuu tundide summa
+			poolikToo(tootaja.tid);
+			//$("#jobText").slideUp();
+			$("#nimiText").html("<h1>"+tootaja.nimi+"</h>");
+			$("#nimiText").slideDown();
+		}
+	})
 }
 
 ///////////////////////////
@@ -264,8 +267,17 @@ function poolikToo(tid) {
 			console.log('on poolik töö olemas');
 			$("#jobText").html("<h1>Leping: "+data[0].lepnr+" - "+data[0].job +"</h>");
 			pToo.rid=data[0].rid;
+			pToo.start=data[0].start;
 			$("#jobText").slideDown()
 		};
 	});
+}
+
+function hetkeAeg() {
+	var hetk= new Date();
+	var louna_algus=pToo.lalgus;
+
+
+	return hetk;
 }
 
