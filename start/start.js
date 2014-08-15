@@ -100,15 +100,7 @@ function ikoodiKontroll() {
 		$("#error").slideDown();
 	}
 }
-/////////////////////
-//näitame veateadet//
-/////////////////////
-function viga(veaText){
-	$("#error").html("<h2>"+veaText+"</h2>");
-	$("#nimiText").slideUp();
-	$("#jobText").slideUp();	
-	$("#error").slideDown();
-}
+
 
 
 ////////////////////////
@@ -125,13 +117,13 @@ $(document).keypress(function(e) {
 		progress3();//tekitame bari ccs abil
 		//kontrollime, et kas on töö kood
 
-		if (tootaja.nimi) {
+		if (tootaja.nimi) {//kui on isik üleval
 				if (kood.substring(0,1)=='0'){
 					jobKontrollOnIsik(kood);
 				}else{
 					nimeKontrollOnIsik(kood);
 				};  
-			}else{
+			}else{ //kui ei ole isikut üleval
 				if (kood.substring(0,1)=='0'){
 					jobKontrollEiIsik(kood);
 				}else{
@@ -149,7 +141,7 @@ function nimeKontrollEiIsik(kood) {
 	$.getJSON("otsi_nimi.php",{ikood:kood},function(data){
 		//console.log(data);
 		if (data[0].Error==1){
-			viga(data[0].Text);
+			viga(data[0].Text, 'yld');
 			tootaja.nimi=false;			
 			tulem=0;
 		}else{
@@ -162,64 +154,18 @@ function nimeKontrollEiIsik(kood) {
 			poolikToo(tootaja.tid);
 			//$("#jobText").slideUp();
 			$("#nimiText").html("<h1>"+tootaja.nimi+"</h>");
-			$("#nimiText").slideDown('fast');
+			$("#nimiText").slideDown();
 			tulem=1;
 		}
 	})
 }
 
-/////////////////////////////////////////////////////
-//Otsime ikoodi järgi nime kui isik on kirjas//
-/////////////////////////////////////////////////////
-function nimeKontrollOnIsik(kood) {
-	var tulem;
-	console.log(tootaja.ikood==kood);
-	if (!(tootaja.ikood==kood)) {
-		$.getJSON("otsi_nimi.php",{ikood:kood},function(data){
-			//console.log(data);
-			if (data[0].Error==1){
-				viga(data[0].Text);
-				tootaja.nimi=false;		
-			}else{
-				tootaja.nimi=data[0].Nimi;
-				tootaja.ikood=data[0].ikood;
-				tootaja.tid=data[0].tid;
-				tootaja.louna_algus=data[0].lalgus;
-				tootaja.louna_lopp=data[0].llopp;
-				selleKuuTunnid(kood); //leiame selle kuu tundide summa
-				poolikToo(tootaja.tid);
-				//$("#jobText").slideUp();
-				$("#nimiText").html("<h1>"+tootaja.nimi+"</h>");
-				$("#nimiText").slideDown('fast');
-			}
-		})
-	}else{
-		console.log('On sama kood!');
-	}
-}
 
-
-///////////////////////////
-//Leiame selle kuu tunnid//
-///////////////////////////
-function selleKuuTunnid(kood){
-	$.getJSON("selleKuuTunnid.php",{ikood:kood},function(data){
-		if (data.error==1){
-			viga(data.Text);
-		}else{
-			//console.log(data[0].aeg_kokku);
-			$("#navAegKokku").html("Kokku aeg: " +data[0].aeg_kokku);
-		}
-	})
-}
-
-
-
-////////////////////////////
-//Otsime tkoodi järgi tööd//
-////////////////////////////
+//////////////////////////////////////////////
+//Otsime tkoodi järgi tööd kui ei ole isikut//
+//////////////////////////////////////////////
 function jobKontrollEiIsik(kood) {
-	console.log('jobKontroll');
+	console.log('jobKontroll ei ole iskut');
 	$.getJSON("otsi_too.php",{tkood:kood},function(data){
 		if (data.error==1){
 			viga(data.Text);
@@ -230,13 +176,101 @@ function jobKontrollEiIsik(kood) {
 	})
 }
 
+/////////////////////////////////////////////////////
+//Otsime ikoodi järgi nime kui isik on kirjas//
+/////////////////////////////////////////////////////
+function nimeKontrollOnIsik(kood) {
+	var tulem;
+	console.log(tootaja.ikood==kood);
+	if (!(tootaja.ikood==kood)) { //kui ei ole sama kood
+		$.getJSON("otsi_nimi.php",{ikood:kood},function(data){
+			//console.log(data);
+			if (data[0].Error==1){
+				viga(data[0].Text);
+				//tootaja.nimi=false;		
+			}else{
+				tootaja.nimi=data[0].Nimi;
+				tootaja.ikood=data[0].ikood;
+				tootaja.tid=data[0].tid;
+				tootaja.louna_algus=data[0].lalgus;
+				tootaja.louna_lopp=data[0].llopp;
+				selleKuuTunnid(kood); //leiame selle kuu tundide summa
+				poolikToo(tootaja.tid);
+				//$("#jobText").slideUp();
+				$("#nimiText").html("<h1>"+tootaja.nimi+"</h>");
+				$("#nimiText").slideDown();
+			}
+		})
+	}else{ //kui on sama kood
+		if (pToo.rid){
+			//kui on poolik töös, siis vaja lõetada
+			console.log('On sama isik ja poolik töö üleval: ' + pToo.rid);
+		};
+	}
+}
+
+//////////////////////////////////////////////
+//Otsime tkoodi järgi tööd kui ei ole isikut//
+//////////////////////////////////////////////
+function jobKontrollOnIsik(kood) {
+	console.log('jobKontroll');
+	$.getJSON("otsi_too.php",{tkood:kood},function(data){
+		if (data.error==1){
+			viga(data.Text);
+		}else{
+			$("#jobText").html("<h1>Leping: "+data[0].lepnr+" - "+data[0].job +"</h>");
+			$("#jobText").slideDown();
+			if (pToo.rid) {
+				console.log('On isik ja on poolik töö:' + pToo.rid);
+				//vaja poolik töö lõpetada ja alustada uuega
+			}else{
+				console.log('On isik, aga poolikut tööd ei ole');
+				//vaja uus töö isikule
+			};
+
+		}
+	})
+}
+
+/////////////////////
+//näitame veateadet//
+/////////////////////
+function viga(veaText,tyyp){
+	$("#error").html("<h2>"+veaText+"</h2>");
+	if (tyyp=='yld'){
+		$("#nimiText").slideUp();
+		$("#jobText").slideUp();
+		$("#navAegKokku").html('');		
+	}else{
+		$("#jobText").slideUp();			
+	}	
+	$("#error").slideDown();
+}
+
+///////////////////////////
+//Leiame selle kuu tunnid//
+///////////////////////////
+function selleKuuTunnid(kood){
+	$.getJSON("selleKuuTunnid.php",{ikood:kood},function(data){
+		if (data.error==1){
+			viga(data.Text, 'yld');
+		}else{
+			//console.log(data[0].aeg_kokku);
+			$("#navAegKokku").html("Kokku aeg: " +data[0].aeg_kokku);
+		}
+	})
+}
+
+
+
+
 /////////////////////////////////
 //Loendame hetkel reg tootajaid//
 /////////////////////////////////
 function tanaTool(){
 	$.getJSON("tanaTool.php",function(data){
 		if (data.error==1){
-			viga(data.Text);
+			viga(data.Text, 'yld');
 		}else{
             $("#tooLoendur").html(data[0].tanakokku);
             $('#tooLoendur').html(data[0].tanaKokku);
@@ -257,6 +291,7 @@ function poolikToo(tid) {
 			$("#jobText").slideDown();
 		}else{
 			//$('#jobText').slideUp();
+			console.log('on poolik töö olemas');
 			$("#jobText").html("<h1>Leping: "+data[0].lepnr+" - "+data[0].job +"</h>");
 			pToo.rid=data[0].rid;
 			$("#jobText").slideDown()
