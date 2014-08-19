@@ -272,13 +272,13 @@ function poolikToo(tid) {
 			console.log('on poolik töö olemas');
 			$("#jobText").html("<h1>Leping: "+data[0].lepnr+" - "+data[0].job +"</h>");
 			pToo.rid=data[0].rid;
-			pToo.start=data[0].start;
+			pToo.start=aeg_minutiks(data[0].start);
 			$("#jobText").slideDown()
 		};
 	});
 }
 ////////////////////////////////////
-//texti aja teisendamine tundideks//
+//texti aja teisendamine minutiteks//
 //////////////////////////////////// 
 function aeg_minutiks (aeg_text){
 	return parseInt(aeg_text.slice(0,2))*60 + parseInt(aeg_text.slice(3,5));
@@ -296,6 +296,7 @@ function hetkeAeg(hetk1) {
 	var aja_lopp=tootaja.aja_lopp;
 	var too_algus=tootaja.too_algus;
 	var too_lopp=tootaja.too_lopp;
+
 	if (hetk1<aja_algus) { //kui on liiga vara
 		hetk1=too_algus;
 	};
