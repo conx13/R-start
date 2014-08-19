@@ -3,7 +3,7 @@
 	include ($path .'/conf.php');
 	if (isset($_GET["ikood"])){
 		$ikood=$_GET["ikood"];
-		$query = "SELECT 0 as error, nimi, tid, ikood, lalgus, llopp ";
+		$query = "SELECT 0 as error, nimi, tid, ikood, lalgus, llopp, tooalgus, toolopp, ajaalgus, ajalopp ";
 		$query .="FROM w_tootajad ";
 		$query .="WHERE ikood = '" . $ikood . "'";
 		$result=pg_query($dbconn,$query);
