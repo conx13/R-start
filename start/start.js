@@ -104,7 +104,7 @@ $(document).keypress(function(e) {
 		$("#error").hide();
 		//$("#nimiText").hide();
 		$("#ikood").val('');
-		progress3();//tekitame bari ccs abil
+		//progress3();//tekitame bari ccs abil
 		//kontrollime, et kas on töö kood
 
 		if (tootaja.nimi) {//kui on isik üleval
@@ -211,8 +211,13 @@ function  nimeKontroll(kood){
 			tootaja.nimi=data[0].nimi;
 			tootaja.ikood=data[0].ikood;
 			tootaja.tid=data[0].tid;
-			tootaja.louna_algus=data[0].lalgus;
-			tootaja.louna_lopp=data[0].llopp;
+			tootaja.louna_algus=aeg_minutiks(data[0].lalgus);
+			tootaja.louna_lopp=aeg_minutiks(data[0].llopp);
+			tootaja.too_algus=aeg_minutiks(data[0].tooalgus);
+			tootaja.too_lopp=aeg_minutiks(data[0].toolopp);
+			tootaja.aja_algus=aeg_minutiks(data[0].ajaalgus);
+			console.log(data[0].ajaalgus);
+			tootaja.aja_lopp=aeg_minutiks(data[0].ajalopp);
 			console.log(tootaja);
 			selleKuuTunnid(kood); //leiame selle kuu tundide summa
 			poolikToo(tootaja.tid);
@@ -272,12 +277,34 @@ function poolikToo(tid) {
 		};
 	});
 }
+////////////////////////////////////
+//texti aja teisendamine tundideks//
+//////////////////////////////////// 
+function aeg_minutiks (aeg_text){
+	return parseInt(aeg_text.slice(0,2))*60 + parseInt(aeg_text.slice(3,5));
+}
 
-function hetkeAeg() {
+/////////////////////////////////////////////////////
+//Arvutame hetke aja, vastavalt tööajale ja lõunale//
+/////////////////////////////////////////////////////
+function hetkeAeg(hetk1) {
 	var hetk= new Date();
-	var louna_algus=pToo.lalgus;
-
-
-	return hetk;
+	hetk=hetk.getHours()*60 + hetk.getMinutes();
+	var louna_algus=tootaja.louna_algus;
+	var louna_lopp=tootaja.louna_lopp;
+	var aja_algus=tootaja.aja_algus;
+	var aja_lopp=tootaja.aja_lopp;
+	var too_algus=tootaja.too_algus;
+	var too_lopp=tootaja.too_lopp;
+	if (hetk1<aja_algus) { //kui on liiga vara
+		hetk1=too_algus;
+	};
+	if (hetk1>aja_lopp) { //kui on peale tööpäeva lõppu
+		hetk1=too_lopp;
+	};
+	if (hetk1>louna_algus && hetk1<louna_lopp) { //kui jääb lõuna sisse
+		hetk1=louna_algus;
+	};
+	return hetk1;
 }
 
