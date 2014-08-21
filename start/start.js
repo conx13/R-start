@@ -270,7 +270,7 @@ function poolikToo(tid) {
 		}else{
 			//$('#jobText').slideUp();
 			console.log('on poolik töö olemas');
-			$("#jobText").html("<h1>Leping: "+data[0].lepnr+" - "+data[0].job +"</h>");
+			$("#jobText").html("<h1>["+data[0].lepnr+"] - "+data[0].job +"</h>");
 			pToo.rid=data[0].rid;
 			pToo.start=aeg_minutiks(data[0].start);
 			$("#jobText").slideDown()
@@ -287,7 +287,7 @@ function aeg_minutiks (aeg_text){
 /////////////////////////////////////////////////////
 //Arvutame hetke aja, vastavalt tööajale ja lõunale//
 /////////////////////////////////////////////////////
-function hetkeAeg(hetk1) {
+function hetkeAeg(hetk) {
 	var hetk= new Date();
 	hetk=hetk.getHours()*60 + hetk.getMinutes();
 	var louna_algus=tootaja.louna_algus;
@@ -296,16 +296,22 @@ function hetkeAeg(hetk1) {
 	var aja_lopp=tootaja.aja_lopp;
 	var too_algus=tootaja.too_algus;
 	var too_lopp=tootaja.too_lopp;
+	var jooksva_too_algus=pToo.start;
 
-	if (hetk1<aja_algus) { //kui on liiga vara
-		hetk1=too_algus;
+	if (hetk<aja_algus) { //kui on liiga vara
+		hetk=too_algus;
 	};
-	if (hetk1>aja_lopp) { //kui on peale tööpäeva lõppu
-		hetk1=too_lopp;
+	if (hetk>aja_lopp) { //kui on peale tööpäeva lõppu
+		hetk=too_lopp;
 	};
-	if (hetk1>louna_algus && hetk1<louna_lopp) { //kui jääb lõuna sisse
-		hetk1=louna_algus;
+	if (hetk>louna_algus && hetk<louna_lopp) { //kui jääb lõuna sisse
+		hetk=louna_algus;
 	};
-	return hetk1;
+	if ((jooksva_too_algus<louna_lopp) && (hetk > louna_lopp)) {
+		hetk=hetk - jooksva_too_algus-30;
+	}else{
+		hetk=hetk - jooksva_too_algus;
+	} ;
+	return hetk;
 }
 
