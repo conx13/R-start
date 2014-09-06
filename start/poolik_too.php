@@ -1,5 +1,6 @@
 <?php
 	$path=$_SERVER['DOCUMENT_ROOT'];
+		error_reporting(0);
 	include ($path .'/conf.php');
 	if (isset($_GET["tid"])){
 		$tid=$_GET["tid"];
@@ -17,7 +18,7 @@
 				};
 				pg_close($dbconn);
 			}else{
-				$data = array('error'=>'1', 'Text'=> 'Tundmatu või vigane kood!');
+				$data = array('error'=>'1', 'Text'=> 'Ei ole aktiivset tööd!');
 			}
 		};
 	}else{

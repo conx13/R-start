@@ -236,8 +236,11 @@ function selleKuuTunnid(kood){
 		if (data.error==1){
 			viga(data.Text, 'yld');
 		}else{
-			//console.log(data[0].aeg_kokku);
-			$("#navAegKokku").html("Kokku aeg: " +data[0].aeg_kokku);
+			if (data[0].aeg_kokku==null){
+				$("#navAegKokku").html('');
+			}else{
+				$("#navAegKokku").html("Kokku aeg: " +data[0].aeg_kokku);
+			}
 		}
 	})
 }
@@ -261,12 +264,13 @@ function tanaTool(){
 //leiame pooliku töö//
 //////////////////////
 function poolikToo(tid) {
+	console.log('poolik_too start');
 	$.getJSON("poolik_too.php",{tid:tid} ,function(data){
-		//console.log(data);
 		if (data.error==1){
-			$("#jobText").html("<h1>Ei ole aktiivset tööd.</h>");
+			viga(data.Text);
+			//$("#jobText").html("<h1>Ei ole aktiivset tööd.</h>");
 			pToo.rid=false;
-			$("#jobText").slideDown();
+			//$("#jobText").slideDown();
 		}else{
 			//$('#jobText').slideUp();
 			console.log('on poolik töö olemas');
@@ -284,10 +288,11 @@ function aeg_minutiks (aeg_text){
 	return parseInt(aeg_text.slice(0,2))*60 + parseInt(aeg_text.slice(3,5));
 }
 
-/////////////////////////////////////////////////////
-//Arvutame hetke aja, vastavalt tööajale ja lõunale//
-/////////////////////////////////////////////////////
-function hetkeAeg(hetk) {
+//////////////////////////////////////////////////////////
+//Arvutame töö aja, vastavalt tööajale ja lõunale. /////
+//Lahutame töö alguse maha ja saame aja mis läheb kirja.//
+//////////////////////////////////////////////////////////
+function tooAegKokku(hetk) {
 	var hetk= new Date();
 	hetk=hetk.getHours()*60 + hetk.getMinutes();
 	var louna_algus=tootaja.louna_algus;
@@ -314,4 +319,14 @@ function hetkeAeg(hetk) {
 	} ;
 	return hetk;
 }
+
+//////////////////////////////////////////////////////////
+//Arvutame hetke aja, võtame arvesse registreeritud aja //
+//////////////////////////////////////////////////////////
+
+function hetkeAeg() {
+	var aeg =new Date();
+	aeg=aeg.getHours()*60 + aeg.getMinutes();
+}
+
 
